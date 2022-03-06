@@ -1,0 +1,12 @@
+{
+  "name": "example-iife",
+  "private": true,
+  "dependencies": {
+    "helper-js": "^2.0.3",
+    "vue-demi": "latest",
+    "vue2": "npm:vue@^2",
+    "vue": "^3",
+    "@vue/composition-api": "^1.4.6",
+    "@virtual-list/vue": "latest"
+  }
+}

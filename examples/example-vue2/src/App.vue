@@ -1,0 +1,61 @@
+<template>
+  <div id="app">
+    <!-- horizontal -->
+    <v-list
+      ref="list"
+      :items="items"
+      :first-render="10"
+      style="width: 1000px"
+      horizontal
+    >
+      <template #default="{ item, index }">
+        <h2 style="border: 1px solid #ccc" :style="{ width: item.width }">
+          ITEM: {{ index }} - {{ item["text"] }}
+        </h2>
+      </template>
+    </v-list>
+    <!-- vertical -->
+    <v-list ref="list" :items="items" :first-render="10" style="height: 600px">
+      <template #default="{ item, index }">
+        <h2
+          style="border: 1px solid #ccc"
+          :style="{ lineHeight: item.lineHeight }"
+        >
+          ITEM: {{ index }} - {{ item["text"] }}
+          <input />
+        </h2>
+      </template>
+    </v-list>
+    <v-list ref="list" :items="items" :first-render="10" style="height: 600px">
+      <template #default="{ item, index }">
+        <h2
+          style="border: 1px solid #ccc"
+          :style="{ lineHeight: item.lineHeight }"
+        >
+          ITEM: {{ index }} - {{ item["text"] }}
+        </h2>
+      </template>
+    </v-list>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import vList from "@virtual-list/vue/vue2";
+import * as hp from "helper-js";
+
+@Component({
+  components: {
+    vList,
+  },
+})
+export default class App extends Vue {
+  items = new Array(1000).fill(1).map((v) => ({
+    text: hp.randString(3),
+    lineHeight: 20 + hp.randInt(1, 10) + "px",
+    width: 100 + hp.randInt(1, 30) + "px",
+  }));
+}
+</script>
+
+<style></style>

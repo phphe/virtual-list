@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- horizontal -->
+      <v-list
+        ref="list"
+        :items="items"
+        :first-render="10"
+        style="width: 1000px"
+        horizontal
+      >
+        <template #default="{ item, index }">
+          <h2 style="border: 1px solid #ccc" :style="{ width: item.width }">
+            ITEM: {{ index }} - {{ item["text"] }}
+          </h2>
+        </template>
+      </v-list>
+      <!-- vertical -->
+      <v-list
+        ref="list"
+        :items="items"
+        :first-render="10"
+        style="height: 600px"
+      >
+        <template #default="{ item, index }">
+          <h2
+            style="border: 1px solid #ccc"
+            :style="{ lineHeight: item.lineHeight }"
+          >
+            ITEM: {{ index }} - {{ item["text"] }}
+            <input />
+          </h2>
+        </template>
+      </v-list>
+      <v-list
+        ref="list"
+        :items="items"
+        :first-render="10"
+        style="height: 600px"
+      >
+        <template #default="{ item, index }">
+          <h2
+            style="border: 1px solid #ccc"
+            :style="{ lineHeight: item.lineHeight }"
+          >
+            ITEM: {{ index }} - {{ item["text"] }}
+          </h2>
+        </template>
+      </v-list>
+    </div>
+    <script src="./node_modules/vue2/dist/vue.js"></script>
+    <script src="./node_modules/@vue/composition-api/dist/vue-composition-api.js"></script>
+    <script src="./node_modules/helper-js/dist/helper-js.js"></script>
+    <script src="./node_modules/vue-demi/lib/index.iife.js"></script>
+    <script src="./node_modules/@virtual-list/vue/dist/v2/index.iife.js"></script>
+    <script>
+      var hp = helperJs;
+      var app = new Vue({
+        el: "#app",
+        components: { "v-list": vitualListVue },
+        data() {
+          return {
+            items: new Array(1000).fill(1).map((v) => ({
+              text: hp.randString(3),
+              lineHeight: 20 + hp.randInt(1, 10) + "px",
+              width: 100 + hp.randInt(1, 30) + "px",
+            })),
+            xx: 1,
+          };
+        },
+      });
+    </script>
+  </body>
+</html>

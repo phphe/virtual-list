@@ -1,10 +1,10 @@
 <script lang="ts">
-import LazyList from "./components/LazyList.vue";
+import vList from "./components/VirtualList.vue";
 import { reactive, defineComponent, onMounted } from "vue";
 import * as hp from "helper-js";
 
 export default defineComponent({
-  components: { LazyList },
+  components: { "v-list": vList },
   data() {
     return {
       items: new Array(1000).fill(1).map((v) => ({
@@ -12,7 +12,6 @@ export default defineComponent({
         lineHeight: 20 + hp.randInt(1, 10) + "px",
         width: 100 + hp.randInt(1, 30) + "px",
       })),
-      xx: 1,
     };
   },
   mounted() {},
@@ -22,10 +21,10 @@ export default defineComponent({
 <template>
   <div>
     <!-- horizontal -->
-    <LazyList
-      ref="lazyList"
+    <v-list
+      ref="list"
       :items="items"
-      :firstRender="xx"
+      :first-render="10"
       style="width: 1000px"
       horizontal
     >
@@ -34,14 +33,20 @@ export default defineComponent({
           ITEM: {{ index }} - {{ item["text"] }}
         </h2>
       </template>
-    </LazyList>
+    </v-list>
     <!-- vertical -->
-    <LazyList
-      ref="lazyList"
-      :items="items"
-      :firstRender="xx"
-      style="height: 600px"
-    >
+    <v-list ref="list" :items="items" :first-render="10" style="height: 600px">
+      <template #default="{ item, index }">
+        <h2
+          style="border: 1px solid #ccc"
+          :style="{ lineHeight: item.lineHeight }"
+        >
+          ITEM: {{ index }} - {{ item["text"] }}
+          <input />
+        </h2>
+      </template>
+    </v-list>
+    <v-list ref="list" :items="items" :first-render="10" style="height: 600px">
       <template #default="{ item, index }">
         <h2
           style="border: 1px solid #ccc"
@@ -50,22 +55,7 @@ export default defineComponent({
           ITEM: {{ index }} - {{ item["text"] }}
         </h2>
       </template>
-    </LazyList>
-    <LazyList
-      ref="lazyList"
-      :items="items"
-      :firstRender="xx"
-      style="height: 600px"
-    >
-      <template #default="{ item, index }">
-        <h2
-          style="border: 1px solid #ccc"
-          :style="{ lineHeight: item.lineHeight }"
-        >
-          ITEM: {{ index }} - {{ item["text"] }}
-        </h2>
-      </template>
-    </LazyList>
+    </v-list>
   </div>
 </template>
 

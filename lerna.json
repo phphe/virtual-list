@@ -1,7 +1,8 @@
 {
   "packages": [
-    "core",
-    "packages/*"
+    "packages/*",
+    "packages/virtual-list-vue/sub-vue2",
+    "examples/iife"
   ],
   "version": "independent"
 }
