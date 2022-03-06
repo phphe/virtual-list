@@ -1,5 +1,5 @@
 <script lang="ts">
-import vList from "@virtual-list/vue";
+import vList from "@vtlist/vue";
 import { reactive, defineComponent, onMounted } from "vue";
 import * as hp from "helper-js";
 

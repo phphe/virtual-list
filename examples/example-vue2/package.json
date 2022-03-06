@@ -7,7 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@virtual-list/vue": "../../packages/virtual-list-vue",
+    "@vtlist/vue": "../../packages/virtual-list-vue",
     "@vue/composition-api": "^1.4.6",
     "core-js": "^3.8.3",
     "helper-js": "^2.0.3",

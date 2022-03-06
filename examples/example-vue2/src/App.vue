@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import vList from "@virtual-list/vue/vue2";
+import vList from "@vtlist/vue/vue2";
 import * as hp from "helper-js";
 
 @Component({

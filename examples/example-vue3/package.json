@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@virtual-list/vue": "../../packages/virtual-list-vue",
+    "@vtlist/vue": "../../packages/virtual-list-vue",
     "helper-js": "^2.0.3",
     "vue": "^3.2.25",
     "vue-demi": "latest"
