@@ -17,7 +17,7 @@ export const globals = {
   "helper-js": "helperJs",
 };
 
-export const name = "vitualListVue"; // for umd, iife
+export const name = "vtlistVue"; // for umd, iife
 
 // https://vitejs.dev/config/
 export default defineConfig({
