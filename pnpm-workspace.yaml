@@ -1,4 +1,4 @@
 packages:
   - "packages/**"
-  - "packages/virtual-list-vue/sub-vue2"
+  - "packages/vtlist-vue/sub-vue2"
   - "examples/iife"

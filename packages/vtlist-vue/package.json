@@ -4,7 +4,7 @@
   "engines": {
     "node": ">=12"
   },
-  "repository": "https://github.com/phphe/virtual-list.git",
+  "repository": "https://github.com/phphe/vtlist.git",
   "license": "MIT",
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
   "homepage": "TODO",
