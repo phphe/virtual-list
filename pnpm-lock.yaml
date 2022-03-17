@@ -16,29 +16,29 @@ importers:
     specifiers:
       '@vtlist/vue': latest
       '@vue/composition-api': ^1.4.6
-      helper-js: ^2.0.3
+      helper-js: ^3.0.0
       vue: ^3
       vue-demi: latest
       vue2: npm:vue@^2
     dependencies:
       '@vtlist/vue': link:../../packages/vtlist-vue
       '@vue/composition-api': 1.4.9_vue@3.2.31
-      helper-js: 2.0.7
+      helper-js: 3.0.0
       vue: 3.2.31
-      vue-demi: 0.12.1_ac2a42527c362575429f172d82b9d821
+      vue-demi: 0.12.4_ac2a42527c362575429f172d82b9d821
       vue2: /vue/2.6.14
 
   packages/vtlist-vue:
     specifiers:
       '@vitejs/plugin-vue': ^2.2.0
-      helper-js: ^2.0.3
+      helper-js: ^3.0.0
       vite: ^2.8.0
       vite-plugin-dts: ^0.9.9
       vue: ^3.2.25
       vue-demi: latest
     dependencies:
-      helper-js: 2.0.7
-      vue-demi: 0.12.1_vue@3.2.31
+      helper-js: 3.0.0
+      vue-demi: 0.12.4_vue@3.2.31
     devDependencies:
       '@vitejs/plugin-vue': 2.2.2_vite@2.8.4+vue@3.2.31
       vite: 2.8.4
@@ -48,7 +48,7 @@ importers:
   packages/vtlist-vue/sub-vue2:
     specifiers:
       '@vue/composition-api': ^1.4.4
-      helper-js: ^2.0.3
+      helper-js: ^3.0.0
       vite: ^2.7.12
       vite-plugin-dts: ^0.9.9
       vite-plugin-vue2: 1.9.0
@@ -57,7 +57,7 @@ importers:
       vue-template-compiler: 2.6.14
     dependencies:
       '@vue/composition-api': 1.4.9_vue@2.6.14
-      helper-js: 2.0.7
+      helper-js: 3.0.0
       vite: 2.8.4
       vite-plugin-dts: 0.9.9_vite@2.8.4
       vite-plugin-vue2: 1.9.0_f79f4155fa4af4ea98842834628f5490
@@ -3754,11 +3754,10 @@ packages:
     hasBin: true
     dev: false
 
-  /helper-js/2.0.7:
-    resolution: {integrity: sha512-qdagluMOcYL5P9fYLqbGedq9LCWH1W4BM2/yTH+XIy6MIYLE+qAHWU6acZ5CyWJslXMhKCKPl1yDYVJCKGgS6A==}
+  /helper-js/3.0.0:
+    resolution: {integrity: sha512-KCvxoV1xcxG4oa6bsmRA5rqIUwZHrins4R76zAb7mE4HkXGWYoBIzxv1flklN6jy3scKOByMfsJrXD1ibnxbQA==}
     dependencies:
       '@babel/runtime': 7.17.2
-      tslib: 2.3.1
     dev: false
 
   /homedir-polyfill/1.0.3:
@@ -6502,8 +6501,8 @@ packages:
       vue: 2.6.14
     dev: false
 
-  /vue-demi/0.12.1_ac2a42527c362575429f172d82b9d821:
-    resolution: {integrity: sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==}
+  /vue-demi/0.12.4_ac2a42527c362575429f172d82b9d821:
+    resolution: {integrity: sha512-ztPDkFt0TSUdoq1ZI6oD730vgztBkiByhUW7L1cOTebiSBqSYfSQgnhYakYigBkyAybqCTH7h44yZuDJf2xILQ==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
@@ -6518,8 +6517,8 @@ packages:
       vue: 3.2.31
     dev: false
 
-  /vue-demi/0.12.1_vue@3.2.31:
-    resolution: {integrity: sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==}
+  /vue-demi/0.12.4_vue@3.2.31:
+    resolution: {integrity: sha512-ztPDkFt0TSUdoq1ZI6oD730vgztBkiByhUW7L1cOTebiSBqSYfSQgnhYakYigBkyAybqCTH7h44yZuDJf2xILQ==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true

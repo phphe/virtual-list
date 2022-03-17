@@ -14,7 +14,7 @@ export const banner = `
 export const globals = {
   vue: "Vue",
   "vue-demi": "VueDemi",
-  "helper-js": "helperJs",
+  "helper-js": "^3.0.0",
 };
 
 export const name = "vtlistVue"; // for umd, iife

@@ -218,7 +218,7 @@ export default defineComponent({
           getScroll(listEl) - getPaddingStart(listEl) - props.buffer;
         const r = hp.binarySearch(
           positions.value,
-          (mid, count) => mid.value - startPosition,
+          (mid) => mid.value - startPosition,
           { returnNearestIfNoHit: true }
         )!;
         return r.index;
@@ -231,7 +231,7 @@ export default defineComponent({
           props.buffer;
         const r = hp.binarySearch(
           positions.value,
-          (mid, count) => mid.value - endPosition,
+          (mid) => mid.value - endPosition,
           { returnNearestIfNoHit: true }
         )!;
         return r.index;

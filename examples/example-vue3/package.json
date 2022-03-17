@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@vtlist/vue": "latest",
-    "helper-js": "^2.0.3",
+    "helper-js": "^3.0.0",
     "vue": "^3.2.25"
   },
   "devDependencies": {

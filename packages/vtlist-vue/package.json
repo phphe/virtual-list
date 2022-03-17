@@ -42,7 +42,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "helper-js": "^2.0.3",
+    "helper-js": "^3.0.0",
     "vue-demi": "latest"
   },
   "peerDependencies": {
