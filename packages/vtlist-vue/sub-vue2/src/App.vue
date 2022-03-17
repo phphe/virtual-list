@@ -1,5 +1,5 @@
 <script lang="ts">
-import vList from "../../../core/src/components/v-list.vue";
+import vList from "../../../vtlist-vue/src/components/VirtualList.vue";
 import {
   ref,
   reactive,
