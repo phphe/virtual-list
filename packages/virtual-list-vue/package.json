@@ -1,10 +1,10 @@
 {
-  "name": "@vtlist/vue",
+  "name": "@virtual-list/vue",
   "version": "0.0.2",
   "engines": {
     "node": ">=12"
   },
-  "repository": "https://github.com/phphe/vtlist.git",
+  "repository": "https://github.com/phphe/virtual-list.git",
   "license": "MIT",
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
   "homepage": "TODO",

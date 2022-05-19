@@ -58,11 +58,11 @@
     <script src="./node_modules/vue/dist/vue.global.js"></script>
     <script src="./node_modules/helper-js/dist/helper-js.js"></script>
     <script src="./node_modules/vue-demi/lib/index.iife.js"></script>
-    <script src="./node_modules/@vtlist/vue/dist/v3/index.iife.js"></script>
+    <script src="./node_modules/@virtual-list/vue/dist/v3/index.iife.js"></script>
     <script>
       var hp = helperJs;
       var app = Vue.createApp({
-        components: { "v-list": vtlistVue },
+        components: { "v-list": virtualListVue },
         data() {
           return {
             items: new Array(1000).fill(1).map((v) => ({

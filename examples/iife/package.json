@@ -7,6 +7,6 @@
     "vue2": "npm:vue@^2",
     "vue": "^3",
     "@vue/composition-api": "^1.4.6",
-    "@vtlist/vue": "latest"
+    "@virtual-list/vue": "latest"
   }
 }
