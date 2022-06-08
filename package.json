@@ -7,7 +7,8 @@
     "lerna": "^4.0.0"
   },
   "scripts": {
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "publish": "lerna version --no-push && cd packages/virtual-list-vue && npm run build && cd ../../ && git push --follow-tags && lerna publish --from-git"
   },
   "config": {
     "commitizen": {
