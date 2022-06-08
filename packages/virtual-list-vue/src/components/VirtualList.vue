@@ -1,11 +1,19 @@
 <template>
   <div
-    class="v-list lazy-list"
+    class="vtlist"
     ref="listElRef"
     :style="listStyle"
     @scroll.passive="onscroll"
   >
-    <div class="v-listInner" ref="listInnerRef" :style="listInnerStyle">
+    <VirtualListTable
+      class="vtlist-inner"
+      ref="listInnerRef"
+      :style="listInnerStyle"
+      :table="table"
+    >
+      <template #prepend>
+        <slot name="prepend"></slot>
+      </template>
       <template v-if="disabled">
         <template v-for="(item, index) in items">
           <slot :item="item" :index="index" />
@@ -16,7 +24,8 @@
           <slot :item="item" :index="index" />
         </template>
       </template>
-    </div>
+      <template #append> <slot name="append"></slot> </template>
+    </VirtualListTable>
   </div>
 </template>
 
@@ -34,10 +43,13 @@ import {
   watch,
 } from "vue-demi";
 import * as hp from "helper-js";
+import { Accumulate } from "helper-js";
+import VirtualListTable from "./VirtualListTable.vue";
 
-export default defineComponent({
+const cpt = defineComponent({
+  components: { VirtualListTable },
   props: {
-    items: Array,
+    items: Array as PropType<any[]>,
     disabled: Boolean,
     horizontal: Boolean,
     firstRender: { type: Number, default: 10 },
@@ -47,10 +59,14 @@ export default defineComponent({
         (item: any, index: number) => number | null | undefined | void
       >,
     },
+    table: Boolean,
   },
   setup(props) {
     const start = ref(0);
     const end = ref(props.firstRender - 1);
+    const end2 = computed(() =>
+      hp.notGreaterThan(end.value, (props.items?.length || 1) - 1)
+    );
     const avgSize = ref(0);
     const startSize = computed(() => getPosition(start.value));
     const totalSize = computed(() =>
@@ -59,11 +75,11 @@ export default defineComponent({
           hp.arrayLast(sizes.value).value
         : 0
     );
-    const totalWidth = computed(() =>
-      props.disabled ? "" : props.horizontal ? totalSize.value + "px" : ""
-    );
-    const totalHeight = computed(() =>
-      props.disabled ? "" : !props.horizontal ? totalSize.value + "px" : ""
+    const endSize = computed(
+      () =>
+        totalSize.value -
+        getPosition(end2.value) -
+        sizes.value[end2.value].value
     );
     const listStyle = computed(() =>
       !props.disabled ? { overflow: "auto" } : {}
@@ -73,18 +89,23 @@ export default defineComponent({
         display: "flex",
       };
       if (!props.disabled) {
-        r[!props.horizontal ? "margin-bottom" : "margin-right"] =
-          totalSize.value + "px";
+        if (!props.horizontal) {
+          Object.assign(r, {
+            "margin-top": startSize.value + "px",
+            "margin-bottom": endSize.value + "px",
+          });
+        } else {
+          Object.assign(r, {
+            "margin-left": startSize.value + "px",
+            "margin-right": endSize.value + "px",
+          });
+        }
       }
       r["flex-direction"] = !props.horizontal ? "column" : "row";
-      if (!props.disabled) {
-        if (!props.horizontal) {
-          r["transform"] = `translateY(${startSize.value}px)`;
-          r["height"] = "0px";
-        } else {
-          r["transform"] = `translateX(${startSize.value}px)`;
-          r["width"] = "0px";
-        }
+      if (props.table) {
+        // @ts-ignore
+        delete r.display;
+        delete r["flex-direction"];
       }
       return r;
     });
@@ -95,7 +116,6 @@ export default defineComponent({
     const sizes = computed(() =>
       (props.items || []).map((item, index) =>
         computed(() => {
-          // console.log("2");
           if (runtimeSizes[index] != null) {
             return runtimeSizes[index];
           }
@@ -103,7 +123,6 @@ export default defineComponent({
           if (r == null) {
             r = avgSize.value;
           }
-          // console.log("2 end");
           return r;
         })
       )
@@ -111,8 +130,7 @@ export default defineComponent({
     // not reactive
     const positionsAccumulate = ref<Accumulate<typeof sizes.value[0]>>(); // for vue2 Only
     const resetPositionsAccumulate = () => {
-      positionsAccumulate.value = new Accumulate();
-      positionsAccumulate.value.arr = sizes.value;
+      positionsAccumulate.value = new Accumulate(sizes.value);
       positionsAccumulate.value.getValue = (item) => item["value"];
     };
     resetPositionsAccumulate();
@@ -129,19 +147,19 @@ export default defineComponent({
           } else {
             r = positionsAccumulate.value!.sum(index - 1);
           }
-          // console.log("1 end");
           return r;
         })
       )
     );
+    watch(() => props.items, update);
     watch(() => positions.value, resetPositionsAccumulate);
     const visibleItemsInfo = computed(() => {
-      if (!props.items) {
+      if (!props.items || props.disabled) {
         return;
       }
       const r: { item: typeof props.items[0]; index: number }[] = [];
 
-      for (let index = start.value; index <= end.value; index++) {
+      for (let index = start.value; index <= end2.value; index++) {
         const item = props.items[index];
         if (!item) {
           break;
@@ -151,14 +169,24 @@ export default defineComponent({
       return r;
     });
     const listElRef = ref<HTMLElement>();
-    const listInnerRef = ref<HTMLElement>();
+    const listInnerRef = ref();
     onMounted(async () => {
       update();
+      try {
+        createResizeObserver();
+      } catch (error) {
+        // ResizeObserver fallback
+        await nextTick();
+        update();
+      }
     });
 
     let prevScroll: number;
     function onscroll() {
       const listEl = listElRef.value!;
+      if (!listEl) {
+        return;
+      }
       const currentScroll = getScroll(listEl);
       if (
         prevScroll != null &&
@@ -182,22 +210,43 @@ export default defineComponent({
       }
       executing = true;
       const listEl = listElRef.value!;
-      const listInner = listInnerRef.value!;
+      const listInner: HTMLElement = listInnerRef.value?.$el;
+      if (!listEl || !listInner) {
+        return;
+      }
 
       if (!avgSize.value) {
         avgSize.value = getAvgSize();
       }
       start.value = getStart();
       end.value = getEnd();
+
       await nextTick();
 
       // updateRuntimeSize
       let updated;
-      for (let i = 0; i < listInner.children.length; i++) {
-        const el = listInner.children[i];
-        const size = getOuterSize(<HTMLElement>el);
-        if (runtimeSizes.value[i] !== size) {
-          runtimeSizes.value[i] = size;
+      let vi0 = 0;
+      const runtimeSizesTemp: Record<number, number> = {};
+      const children = !props.table
+        ? listInner.children
+        : listInner.querySelector("tbody")!.children;
+      for (let i = 0; i < children.length; i++) {
+        const el = children[i];
+        const cssPosition = hp.css(el, "position");
+        if (cssPosition && ["absolute", "fixed"].includes(cssPosition)) {
+          continue;
+        }
+        const size =
+          hp.css(el, "display") !== "none" ? getOuterSize(<HTMLElement>el) : 0;
+        const vi = el.getAttribute("vt-index");
+        const index = vi ? parseInt(vi) : start.value + vi0;
+        runtimeSizesTemp[index] = (runtimeSizesTemp[index] || 0) + size;
+        vi0++;
+      }
+      for (const indexS of Object.keys(runtimeSizesTemp)) {
+        const index = parseInt(indexS);
+        if (runtimeSizes.value[index] !== runtimeSizesTemp[index]) {
+          runtimeSizes.value[index] = runtimeSizesTemp[index];
           updated = true;
         }
       }
@@ -229,6 +278,7 @@ export default defineComponent({
           getPaddingStart(listEl) +
           getClientSize(listEl) +
           props.buffer;
+
         const r = hp.binarySearch(
           positions.value,
           (mid) => mid.value - endPosition,
@@ -239,8 +289,11 @@ export default defineComponent({
       function getAvgSize() {
         const maxSampleCount = 10;
         const sizeArr: number[] = [];
-        for (let index = 0; index < listInner.children.length; index++) {
-          const el = <HTMLElement>listInner.children[index];
+        const children = !props.table
+          ? listInner.children
+          : listInner.querySelector("tbody")!.children;
+        for (let index = 0; index < children.length; index++) {
+          const el = <HTMLElement>children[index];
           const style = getComputedStyle(el);
           if (["absolute", "fixed"].includes(style.position)) {
             continue;
@@ -291,6 +344,7 @@ export default defineComponent({
           parseFloat(style.marginLeft) +
           parseFloat(style.marginRight);
       }
+      r = Number.isNaN(r) ? 0 : r;
       return r;
     }
     function getScroll(el: HTMLElement) {
@@ -312,6 +366,19 @@ export default defineComponent({
       return positions.value[index].value;
     }
 
+    function createResizeObserver() {
+      const listEl = listElRef.value!;
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          if (hp.hasClass(entry.target, "vtlist")) {
+            update();
+            break;
+          }
+        }
+      });
+      resizeObserver.observe(listEl);
+    }
+
     return {
       listElRef,
       listInnerRef,
@@ -319,26 +386,11 @@ export default defineComponent({
       listStyle,
       listInnerStyle,
       visibleItemsInfo,
-      totalHeight,
-      totalWidth,
     };
   },
 });
-class Accumulate<T> {
-  arr: T[] = [];
-  cache: number[] = [];
-  getValue(item: T): number {
-    // @ts-ignore
-    return item;
-  }
-  sum(index: number) {
-    if (this.cache[index] == null) {
-      let prev = index > 0 ? this.sum(index - 1) : 0;
-      this.cache[index] = this.getValue(this.arr[index]) + prev;
-    }
-    return this.cache[index];
-  }
-}
+export default cpt;
+export type VtlistType = InstanceType<typeof cpt>;
 </script>
 
 <style></style>
