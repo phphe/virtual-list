@@ -37,8 +37,8 @@
     "dev": "npx vue-demi-switch 3 && vite --config vite.dev.js",
     "dev2": "npx vue-demi-switch 2 && cd sub-vue2 && vite --config vite.dev.js",
     "build": "npm run build3 && npm run build2",
-    "build3": "npx vue-demi-switch 3 && vite build",
-    "build2": "npx vue-demi-switch 2 && cd sub-vue2 && vite build",
+    "build3": "npx vue-demi-switch 3 && vite build && vite build -- --iife",
+    "build2": "npx vue-demi-switch 2 && cd sub-vue2 && vite build && vite build -- --iife",
     "preview": "vite preview"
   },
   "dependencies": {

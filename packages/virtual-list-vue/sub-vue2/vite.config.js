@@ -7,6 +7,8 @@ import {
   externalFunction,
   globals,
   name,
+  isIIFE,
+  formats,
 } from "../vite.config.js";
 
 export default defineConfig({
@@ -16,14 +18,14 @@ export default defineConfig({
   },
   build: {
     outDir: "../dist/v2",
-    sourcemap: true,
+    sourcemap: isIIFE,
+    emptyOutDir: !isIIFE,
     lib: {
       entry: "../src/index.ts",
       name,
       fileName: "index",
-      formats: ["es", "cjs", "iife"],
+      formats,
     },
-    emptyOutDir: true,
     rollupOptions: {
       external: externalFunction,
       output: {
