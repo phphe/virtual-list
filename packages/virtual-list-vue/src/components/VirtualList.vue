@@ -15,12 +15,15 @@
         <slot name="prepend"></slot>
       </template>
       <template v-if="disabled">
-        <template v-for="(item, index) in items">
+        <template v-for="(item, index) in items" :key="getItemKey(item, index)">
           <slot :item="item" :index="index" />
         </template>
       </template>
       <template v-else>
-        <template v-for="{ item, index } in visibleItemsInfo">
+        <template
+          v-for="{ item, index } in visibleItemsInfo"
+          :key="getItemKey(item, index)"
+        >
           <slot :item="item" :index="index" />
         </template>
       </template>
@@ -54,7 +57,12 @@ const cpt = defineComponent({
     horizontal: Boolean,
     firstRender: { type: Number, default: 10 },
     buffer: { type: Number, default: 100 },
-    getItemSize: {
+    itemKey: {
+      type: [String, Function] as PropType<
+        "index" | ((item: any, index: number) => any)
+      >,
+    },
+    itemSize: {
       type: Function as PropType<
         (item: any, index: number) => number | null | undefined | void
       >,
@@ -98,6 +106,7 @@ const cpt = defineComponent({
           Object.assign(r, {
             "margin-left": startSize.value + "px",
             "margin-right": endSize.value + "px",
+            width: totalSize.value - endSize.value - startSize.value + "px",
           });
         }
       }
@@ -119,7 +128,7 @@ const cpt = defineComponent({
           if (runtimeSizes[index] != null) {
             return runtimeSizes[index];
           }
-          let r = props.getItemSize?.(item, index);
+          let r = props.itemSize?.(item, index);
           if (r == null) {
             r = avgSize.value;
           }
@@ -379,6 +388,16 @@ const cpt = defineComponent({
       resizeObserver.observe(listEl);
     }
 
+    function getItemKey(item: any, index: number) {
+      if (props.itemKey) {
+        if (typeof props.itemKey === "string" && props.itemKey === "index") {
+          return index;
+        } else if (typeof props.itemKey === "function") {
+          return props.itemKey(item, index);
+        }
+      }
+    }
+
     return {
       listElRef,
       listInnerRef,
@@ -386,6 +405,7 @@ const cpt = defineComponent({
       listStyle,
       listInnerStyle,
       visibleItemsInfo,
+      getItemKey,
     };
   },
 });
