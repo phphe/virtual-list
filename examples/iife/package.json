@@ -2,7 +2,6 @@
   "name": "example-iife",
   "private": true,
   "dependencies": {
-    "helper-js": "^3.0.0",
     "vue-demi": "latest",
     "vue2": "npm:vue@^2",
     "vue": "^3",
