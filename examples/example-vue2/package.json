@@ -10,7 +10,6 @@
     "@virtual-list/vue": "latest",
     "@vue/composition-api": "^1.4.6",
     "core-js": "^3.8.3",
-    "helper-js": "^3.0.0",
     "vue": "^2.6.14",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2"
