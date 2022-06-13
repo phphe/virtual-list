@@ -4,16 +4,16 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "npx vue-demi-switch 3 && vite",
+    "build": "npx vue-demi-switch 3 && vite build",
     "prerender": "node prerender/prerender.js",
-    "serve": "vite preview",
+    "serve": "npx vue-demi-switch 3 && vite preview",
     "generate": "ts-node scripts/generate.ts",
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "lint:style": "stylelint src/**/*.{css,scss,vue}",
     "compile-docs": "ts-node scripts/compile-docs.ts",
     "watch-compile-docs": "ts-node scripts/compile-docs.ts -- --watch",
-    "deploy": "ts-node scripts/deply.ts"
+    "deploy": "ts-node scripts/deploy.ts"
   },
   "dependencies": {
     "@he-tree/vue3": "^1.2.9",

@@ -15,14 +15,17 @@ async function start() {
   const step3 = hp.promisePin<void, any>()
   const preview = spawn('npx' + (isWin ? '.cmd' : ''), ['vite', 'preview'])
   preview.stdout.on('data', (data) => {
-    console.log(data.toString())
+    console.log('step3: ' + data.toString())
     if (data.toString().includes('Local:')) {
       step3.resolve()
     }
   })
   preview.stderr.on('data', (data) => {
-    console.error(data.toString())
+    console.error('step3: ' + data.toString())
     step3.reject(data)
+  })
+  preview.on('close', () => {
+    console.log('step3: stop preview')
   })
   await step3.promise
   console.log('Step 4: prerender')
@@ -30,4 +33,5 @@ async function start() {
   // end
   preview.kill()
   console.log('done')
+  process.exit(0)
 }
