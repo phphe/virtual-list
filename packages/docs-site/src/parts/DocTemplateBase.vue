@@ -5,24 +5,7 @@
     components: { vheading },
     methods: {
       resolveHref(href) {
-        if (href.match(/^[\w-_]+:/)) {
-          // such as mailto:
-          return href
-        }
-        let path = href.replace('.md', '')
-        if (
-          !path.startsWith('/') &&
-          !path.includes('//') &&
-          !path.startsWith('#')
-        ) {
-          const dirname = this.$route.path.replace(/\/[^\/]*$/, '')
-          path = concatAndResolveUrl(dirname, path)
-        }
-        let t = path.split('#')
-        if (t.length === 2) {
-          path = t[0] + '#' + t[1].toLowerCase()
-        }
-        return path
+        return href
       },
     },
   }

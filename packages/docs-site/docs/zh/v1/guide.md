@@ -6,31 +6,23 @@
 
 ```sh
 # Vue3
-npm i --save @virtual-list/vue3
+npm i --save @virtual-list/vue
 # Vue2
-npm i --save @virtual-list/vue2
+npm i --save @virtual-list/vue @vue/composition-api
 ```
 
 ### CDN
 
-```html
-<!-- vue3 -->
-<script src="https://unpkg.com/@virtual-list/vue3/dist/index.iife.js"></script>
-<!-- vue2 -->
-<script src="https://unpkg.com/@virtual-list/vue2/dist/index.iife.js"></script>
-
-<script>
-  var vlist = virtualListVue
-</script>
-```
+- Vue3: [example](https://github.com/phphe/virtual-list/blob/main/examples/iife/vue3.html)
+- Vue2: [example](https://github.com/phphe/virtual-list/blob/main/examples/iife/vue2.html)
 
 ## 引入
 
 ```ts
 // vue3
-import VirtualList from '@virtual-list/vue3'
+import VirtualList from '@virtual-list/vue'
 // vue2
-import VirtualList from '@virtual-list/vue2'
+import VirtualList from '@virtual-list/vue/vue2'
 ```
 
 ## props
@@ -78,23 +70,27 @@ import VirtualList from '@virtual-list/vue2'
 
 ## 例子
 
+受本站全局 css 影响, 例子的样式与实际样式有细微差别.
+
 ### 横向
+
+<!-- code & demo -->
 
 ```vue
 <template>
-  <v-list :items="items" style="width: 1000px" horizontal>
+  <v-list :items="items" horizontal>
     <template #default="{ item, index }">
-      <h2 style="border: 1px solid #ccc" :style="{ width: item.width }">
+      <div style="border: 1px solid #ccc" :style="{ width: item.width }">
         ITEM: {{ index }} - {{ item['text'] }}
-      </h2>
+      </div>
     </template>
   </v-list>
 </template>
 <script>
-  import VirtualList from '@virtual-list/vue3'
+  import VirtualList from '@virtual-list/vue'
 
   export default {
-    components: { 'v-list': vList },
+    components: { 'v-list': VirtualList },
     data() {
       return {
         items: new Array(1000).fill(1).map((v, i) => ({
@@ -113,25 +109,26 @@ import VirtualList from '@virtual-list/vue2'
 
 ### 纵向
 
+<!-- code & demo -->
+
 ```vue
 <template>
   <v-list :items="items" style="height: 600px">
     <template #default="{ item, index }">
-      <h2
+      <div
         style="border: 1px solid #ccc"
         :style="{ lineHeight: item.lineHeight }"
       >
         ITEM: {{ index }} - {{ item['text'] }}
-        <input />
-      </h2>
+      </div>
     </template>
   </v-list>
 </template>
 <script>
-  import VirtualList from '@virtual-list/vue3'
+  import VirtualList from '@virtual-list/vue'
 
   export default {
-    components: { 'v-list': vList },
+    components: { 'v-list': VirtualList },
     data() {
       return {
         items: new Array(1000).fill(1).map((v, i) => ({
@@ -151,9 +148,11 @@ import VirtualList from '@virtual-list/vue2'
 
 ### 表格
 
+<!-- code & demo -->
+
 ```vue
 <template>
-  <v-list :items="items" table class="list-table">
+  <v-list :items="items" table class="list-table" style="height: 600px">
     <template #prepend>
       <thead>
         <tr>
@@ -171,10 +170,10 @@ import VirtualList from '@virtual-list/vue2'
   </v-list>
 </template>
 <script>
-  import VirtualList from '@virtual-list/vue3'
+  import VirtualList from '@virtual-list/vue'
 
   export default {
-    components: { 'v-list': vList },
+    components: { 'v-list': VirtualList },
     data() {
       return {
         items: new Array(1000).fill(1).map((v, i) => ({

@@ -7,7 +7,7 @@
   "repository": "https://github.com/phphe/virtual-list.git",
   "license": "MIT",
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
-  "homepage": "TODO",
+  "homepage": "https://virtual-list.phphe.com",
   "main": "dist/v3/index.cjs.js",
   "module": "dist/v3/index.es.js",
   "types": "dist/index.d.ts",
@@ -42,7 +42,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "helper-js": "^3.0.0",
+    "helper-js": "^3.1.0",
     "vue-demi": "latest"
   },
   "peerDependencies": {

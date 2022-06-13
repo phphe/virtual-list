@@ -5,16 +5,6 @@ import compiledRoutes from './compiled-docs/routes'
 export const routes: VueRouter.RouteRecordRaw[] = [
   ...compiledRoutes,
   {
-    name: 'home',
-    path: '/',
-    component: () => import('./views/home.vue'),
-  },
-  {
-    name: 'examples',
-    path: '/examples',
-    component: () => import('./views/examples.vue'),
-  },
-  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('./views/NotFound.vue'),

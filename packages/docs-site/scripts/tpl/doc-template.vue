@@ -14,11 +14,14 @@
 
   export default {
     extends: DocTemplateBase,
+    components: {
+      /*__components__*/
+    },
     setup() {
       const vm = getCurrentInstance()
-      const data = ':data'
+      const data = ':data' || {}
       useTitle(data.name, vm)
-      docsSubmenu.value = data.children
+      docsSubmenu.value = data.children || []
       onBeforeUnmount(() => {
         docsSubmenu.value = null
       })

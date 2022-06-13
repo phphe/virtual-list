@@ -17,7 +17,11 @@ teleport(to="head")
     },
     computed: {
       hrefItems() {
-        if (this.$route.name && this.$route.meta.i18n !== false) {
+        if (
+          this.$route.name &&
+          this.$route.meta.i18n !== false &&
+          Object.keys(this.$route.meta.alternate).length > 1
+        ) {
           return this.locales.map((v: string) => ({
             locale: v,
             href:

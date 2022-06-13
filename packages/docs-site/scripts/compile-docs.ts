@@ -20,14 +20,8 @@ const start = () => {
 
   const watcher = chokidar.watch(docsDir)
   const data = {
-    versions: {},
     routes: {},
   } as {
-    versions: {
-      [version: string]: {
-        [locale: string]: []
-      }
-    }
     routes: {
       [md5Name: string]: {
         name: string | null
@@ -70,9 +64,14 @@ const start = () => {
       return
     }
     console.log(event, filepath)
-    const md5Name = md5(filepath)
+    const md5Name =
+      path.basename(filepath, path.extname(filepath)).replace(/\W/g, '_') +
+      '_' +
+      md5(filepath)
+    const componentPath = path.join(compiledDir, md5Name + '.vue')
     if (event === 'unlink') {
       delete data.routes[md5Name]
+      fs.unlinkSync(componentPath)
     } else {
       const locales = getLocales()
       let t = filepath.split(path.sep)
@@ -80,14 +79,36 @@ const start = () => {
       const pathWithoutLocale = t.slice(2).join('/')
       const fileContent = fs.readFileSync(filepath).toString()
       const filename = hp.arrayLast(t)
-      const componentPath = path.join(compiledDir, md5Name + '.vue')
-      const html = marked(fileContent)
-      const vueTemplate = handleHtmlForVue(html)
+      const codeDemoReplaced = handleCodeDemo(fileContent)
+      const html = marked(codeDemoReplaced)
+      let injectedComponents: Record<string, string> = {}
+      const vueTemplate = handleHtmlForVue(html, filepath, injectedComponents)
       const structure = resolveMdStructure(html)
-      const tpl = fs.readFileSync('scripts/tpl/doc-template.vue').toString()
+      const tpl = fs
+        .readFileSync(path.join(__dirname, 'tpl/doc-template.vue'))
+        .toString()
       const componentContent = tpl
         .replace('<!-- :template -->', vueTemplate)
         .replace("':data'", JSON.stringify(structure))
+        .replace(
+          /(?<=\n|^)(<script.*?>)/,
+          '$1\n' +
+            Object.keys(injectedComponents)
+              .map(
+                (name) =>
+                  `import ${name} from ${JSON.stringify(
+                    injectedComponents[name]
+                  )}`
+              )
+              .join('\n')
+        )
+        .replace(
+          '/*__components__*/',
+          '...' +
+            JSON.stringify(
+              hp.objectMap(injectedComponents, (v, key) => key)
+            ).replace(/:"(.*?)"/g, ':$1')
+        )
       fs.writeFileSync(componentPath, componentContent)
       const urlPath = genUrl(locale, pathWithoutLocale)
       const alternate: any = {}
@@ -122,6 +143,10 @@ function genUrl(locale: string, pathWithoutLocale: string) {
   if (locale !== baseConfig.LOCALE) {
     t = `/${locale}` + t
   }
+  t = t.replace(/index$/, '')
+  if (!t) {
+    t = '/'
+  }
   return t
 }
 function md5(str: string) {
@@ -129,7 +154,11 @@ function md5(str: string) {
   return md5.update(str).digest('hex')
 }
 
-function handleHtmlForVue(html: string) {
+function handleHtmlForVue(
+  html: string,
+  filepath: string,
+  injectedComponents: Record<string, string>
+) {
   html = html.replace(/<code/g, '<code v-pre') // for vue show '{{' and '}}'
   // replace heading to component
   for (let i = 1; i <= 6; i++) {
@@ -138,18 +167,27 @@ function handleHtmlForVue(html: string) {
   }
   // replace link to component
   const reg = /<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/g
-  const m = html.match(reg)
-  if (m) {
-    for (const item of m) {
-      const reg2 = new RegExp(reg.source)
-      const m2 = item.match(reg2)!
-      const replacedItem = item.replace(
-        reg2,
-        `<Anchor$1:to="resolveHref('$2')"$3>$4</Anchor>`
-      )
-      html = html.replace(item, replacedItem)
+  html = html.replace(reg, (matched) => {
+    if (!isInternalDocHref(matched)) {
+      return matched
     }
-  }
+    const reg2 = new RegExp(reg.source)
+    const m = matched.match(reg2)!
+    let url = internalDocHrefToUrl(m[2], filepath)
+    return `<Anchor${m[1]}:to="resolveHref('${url.replace(/'/g, "\\'")}')"${
+      m[3]
+    }>${m[4]}</Anchor>`
+  })
+  // inject user component
+  html = html.replace(/<component path=".+?" \/>/g, (mathced) => {
+    const m = mathced.match(/<component path="(.+?)" \/>/)!
+    const componentPath = m[1]
+    const name = `inject_${componentPath.replace(/\W/g, '_')}_${md5(mathced)}`
+    injectedComponents[name] = handlePath(
+      path.relative(compiledDir, path.join('src/', componentPath))
+    )
+    return `<${name} />`
+  })
   return html
 }
 
@@ -189,4 +227,87 @@ function resolveMdStructure(html: string) {
       }
     })
   return data.children[0]
+}
+
+function handleCodeDemo(str: string) {
+  return str.replace(
+    /(?<=\n|^)<!-- code & demo -->\n\n\`\`\`(\w+)([\s\S]*?)\n\`\`\`/g,
+    (mathced) => {
+      const m = mathced.match(
+        /^<!-- code & demo -->\n\n\`\`\`(\w+)([\s\S]*?)\n\`\`\`$/
+      )!
+      const lang = m[1]
+      const code = m[2]
+      const md5Name = md5(code)
+      const componentPath = path.join(compiledDir, md5Name + '.vue')
+      fs.writeFileSync(componentPath, code)
+      // write code to a single ts file
+      const codePath = path.join(
+        compiledDir,
+        'code_demo_code_' + md5Name + '.ts'
+      )
+      fs.writeFileSync(
+        codePath,
+        `export default \`${code.trim().replace(/\`/g, '\\`')}\``
+      )
+      // wrapper component
+      let wrapperStr = fs
+        .readFileSync(path.join(__dirname, 'tpl/CodeDemoWrapper.vue'))
+        .toString()
+      wrapperStr = wrapperStr
+        .replace(
+          '/*__import__*/',
+          `import v_${md5Name} from ${JSON.stringify(
+            handlePath(path.relative(compiledDir, componentPath))
+          )}
+          import code from ${JSON.stringify(
+            handlePath(path.relative(compiledDir, codePath))
+          )}
+          `
+        )
+        .replace('/*__demo__*/', 'Demo: v_' + md5Name + ',')
+        .replace(`code: ''`, `code: \`${code.trim().replace(/\`/g, '\\`')}\``)
+      const wrapperName = 'code_demo_wrapper_' + md5(wrapperStr)
+      let wrapperPath = path.join(compiledDir, wrapperName + '.vue')
+      fs.writeFileSync(wrapperPath, wrapperStr)
+      let wrapperPath2 = handlePath(path.relative('src', wrapperPath))
+      return `<component path="${wrapperPath2}" />`
+    }
+  )
+}
+
+function handlePath(p: string) {
+  if (p[0] !== '.') {
+    p = './' + p
+  }
+  if (p.indexOf('\\') > -1) {
+    p = p.split(path.sep).join(path.posix.sep)
+  }
+  return p
+}
+
+function isInternalDocHref(url: string) {
+  if (url.match(/^[\w-_]+:/)) {
+    // such as mailto:
+    return false
+  }
+  if (url.match(/\.md\b/)) {
+    return true
+  }
+}
+
+function internalDocHrefToUrl(href: string, docPath: string) {
+  let t = href.split('#')
+  const hash = t[1]
+  let targetAbsPath = path.resolve(path.dirname(docPath), t[0])
+  let targetRelativePath = path.relative(docsDir, targetAbsPath)
+  console.log(targetRelativePath)
+  t = targetRelativePath.replace(/^.(\\|\/)/, '').split(path.sep)
+  const locale = t[0]
+  const pathWithoutLocale = t.slice(1).join('/')
+  let url = genUrl(locale, pathWithoutLocale)
+  if (hash) {
+    url += '#' + hash.toLowerCase()
+  }
+  return url
 }

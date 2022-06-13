@@ -6,7 +6,7 @@
   v-bind="$attrs"
 )
   slot
-  Icon.caret.popup-caret.relative.transition(v-if="caret" :class="{'transform rotate-180': localVisible}" name="arrow_drop_down")
+  VIconMDI.caret.popup-caret.relative.transition(v-if="caret" :class="{'transform rotate-180': localVisible}" :icon="mdiArrowDropDown")
 teleport(to="body")
   transition(:name="transition")
     .popup-card.bg-white(
@@ -21,11 +21,12 @@ teleport(to="body")
 <script lang="ts">
   import { defineComponent } from 'vue'
   import * as hp from 'helper-js'
-  import Icon from './Icon.vue'
   import '../assets/style/transitions/fade.scss'
+  import { mdiArrowDropDown } from 'mdi-js/filled'
+  import VIconMDI from './VIconMDI.vue'
 
   export default defineComponent({
-    components: { Icon },
+    components: { VIconMDI },
     props: {
       mode: {
         type: String,
@@ -45,6 +46,7 @@ teleport(to="body")
       return {
         cardStyle: {},
         localVisible: false,
+        mdiArrowDropDown,
       }
     },
     mounted() {

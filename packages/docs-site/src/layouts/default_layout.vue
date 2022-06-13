@@ -2,7 +2,7 @@
 .default-layout.fixed.w-full.h-full.flex
   .main-sidebar.flex-shrink-0.w-56.h-full.overflow-hidden.flex.flex-col(:class="{'fixed bg-white z-10 border-r-2': sm}" v-show="!sm || sidebarVisible")
     .text-center.p-2.bg-gray-50.pointer(v-if="sm" @click="sidebarVisible=false")
-      Icon(name="arrow_back")
+      VIconMDI(:icon="mdiArrowBack")
     .flex-grow.overflow-y-auto.overflow-x-hidden.px-4.flex.flex-col
       //- .contents-block.p-4.border-b-2(v-show="state.tableOfContents.visible")
       //-   .text-xl {{$t('Contents')}}
@@ -10,7 +10,7 @@
       //-     li(v-for="item in state.tableOfContents.value")
       //-       a.text-primary-600(class='hover:text-primary-800' :href="item.url" v-anchor) {{item.text}}
 
-      Anchor.main-title.text-2xl.text-gray-700.py-4.font-semibold(:to="{name: 'home'}")
+      Anchor.main-title.text-2xl.text-gray-700.py-4.font-semibold(to="/")
         span {{config.APP_NAME}}
       .main-menu.mt-2.text-gray-600.h-0.flex-grow.flex.flex-col.pb-4
         DocsMenuItem.main-menu-item(:to="{path: '/v1/guide'}") {{$t('Guide')}}
@@ -27,8 +27,8 @@
     .px-6.main-body
       router-view(:key="routeViewKey")
     //- .py-10.text-center.text-sm.text-gray-500 Copyright © {{config.APP_NAME}} {{year}}. All rights reserved.
-  Btn.fixed.bottom-5.right-2(v-if="sm" color="primary" class="h-10" paddingClass="px-2" @click="sidebarVisible=!sidebarVisible")
-    Icon(name="menu")
+  button.fixed.bottom-5.right-2(v-if="sm" color="primary" class="h-10 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 px-2 rounded" @click="sidebarVisible=!sidebarVisible")
+    VIconMDI(:icon="mdiMenu")
 </template>
 
 <script lang="ts">
@@ -40,13 +40,14 @@
   import useWindowSize from '../plugins/useWindowSize'
   import config from '../config'
   import DocsMenuItem from '../parts/DocsMenuItem.vue'
+  import { mdiArrowBack, mdiMenu } from 'mdi-js/filled'
 
   export default defineComponent({
     components: { DocsMenuItem },
     setup(props) {
       const windowSize = useWindowSize()
       const sm = computed(() => windowSize.value.innerWidth < 760)
-      return { routeViewKey, reloadRouteView, sm }
+      return { routeViewKey, reloadRouteView, sm, mdiArrowBack, mdiMenu }
     },
     data() {
       return {

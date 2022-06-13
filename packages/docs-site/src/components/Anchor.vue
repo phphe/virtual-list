@@ -74,7 +74,7 @@ a.anchor.cursor-pointer(v-bind="props.bind" v-is="props.is" :class="underline ? 
             ) {
               // get locale route by meta.alternate
               let t = this.$router.resolve(to)
-              if (t.meta.alternate) {
+              if (t.meta.alternate && t.meta.alternate[this.$i18n.locale]) {
                 to = {
                   path: t.meta.alternate[this.$i18n.locale],
                   params: t.params,
@@ -82,23 +82,23 @@ a.anchor.cursor-pointer(v-bind="props.bind" v-is="props.is" :class="underline ? 
                   hash: t.hash,
                 }
               } else {
-                let to0 = to
-                if (!to0.name) {
-                  to0 = hp.objectOnly(this.$router.resolve(to0), [
-                    'name',
-                    'query',
-                    'hash',
-                    'params',
-                  ])
-                }
-                if (!to0.name.match(/\.i18n(\b|$)/)) {
-                  to = {
-                    ...to0,
-                    name: to0.name + '.i18n',
-                    params: { ...to0.params, locale: this.$i18n.locale },
-                    query: { ...(to0.query || {}) },
-                  }
-                }
+                // let to0 = to
+                // if (!to0.name) {
+                //   to0 = hp.objectOnly(this.$router.resolve(to0), [
+                //     'name',
+                //     'query',
+                //     'hash',
+                //     'params',
+                //   ])
+                // }
+                // if (!to0.name.match(/\.i18n(\b|$)/)) {
+                //   to = {
+                //     ...to0,
+                //     name: to0.name + '.i18n',
+                //     params: { ...to0.params, locale: this.$i18n.locale },
+                //     query: { ...(to0.query || {}) },
+                //   }
+                // }
               }
               r.bind.to = to
             }
