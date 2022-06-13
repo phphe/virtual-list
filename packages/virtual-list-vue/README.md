@@ -1,7 +1,13 @@
-# Vue 3 + Vite
+# virtual-list
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+![NPM](https://img.shields.io/npm/l/@virtual-list/vue?style=for-the-badge)
+![npm](https://img.shields.io/npm/v/@virtual-list/vue?style=for-the-badge)
+![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@virtual-list/vue?style=for-the-badge)
 
-## Recommended IDE Setup
+[中文](https://virtual-list.phphe.com/zh) | [English](https://virtual-list.phphe.com/)
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+Vue virtual list. Features: Vue2, Vue3, TypeScript, SSR, horizontal list , virtual table. [Document & Demo](https://virtual-list.phphe.com/)
+
+## License
+
+MIT
