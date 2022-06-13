@@ -6,7 +6,11 @@
 
 [中文](https://virtual-list.phphe.com/zh) | [English](https://virtual-list.phphe.com/)
 
-Vue virtual list. Features: Vue2, Vue3, TypeScript, SSR, horizontal list , virtual table. [Document & Demo](https://virtual-list.phphe.com/)
+Vue virtual list. Features: Vue2, Vue3, TypeScript, SSR, horizontal list , virtual table.
+
+Vue 虚拟列表. 特点: 支持 Vue2, Vue3, TypeScript, SSR, 横向列表, 虚拟表格.
+
+[Document & Demo](https://virtual-list.phphe.com/)
 
 ## License
 
