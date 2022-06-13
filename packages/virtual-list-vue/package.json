@@ -4,6 +4,13 @@
   "engines": {
     "node": ">=12"
   },
+  "description": "virtual list. Features: Vue2, Vue3, TypeScript, SSR, horizontal, table.",
+  "keywords": [
+    "virtual list",
+    "virtual table",
+    "virtual scroll",
+    "vue component"
+  ],
   "repository": "https://github.com/phphe/virtual-list.git",
   "license": "MIT",
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
