@@ -4,5 +4,10 @@
     "packages/virtual-list-vue/sub-vue2",
     "examples/iife"
   ],
+  "command": {
+    "version": {
+      "conventionalCommits": true
+    }
+  },
   "version": "independent"
 }
