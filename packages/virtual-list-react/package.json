@@ -1,5 +1,5 @@
 {
-  "name": "virtual-list-react",
+  "name": "@virtual-list/react",
   "version": "0.1.0",
   "type": "module",
   "repository": "https://github.com/phphe/virtual-list.git",
