@@ -76,7 +76,7 @@ const cpt = defineComponent({
       hp.notGreaterThan(end.value, (props.items?.length || 1) - 1)
     );
     const avgSize = ref(0);
-    const startSize = computed(() => getPosition(start.value));
+    const startSize = computed(() => positions.value[start.value] ? getPosition(start.value) : 0);
     const totalSize = computed(() =>
       positions.value.length > 0
         ? getPosition(positions.value.length - 1) +
@@ -85,9 +85,10 @@ const cpt = defineComponent({
     );
     const endSize = computed(
       () =>
+      positions.value[end2.value] ? (
         totalSize.value -
         getPosition(end2.value) -
-        sizes.value[end2.value].value
+        sizes.value[end2.value].value) : 0
     );
     const listStyle = computed(() =>
       !props.disabled ? { overflow: "auto" } : {}
