@@ -141,7 +141,7 @@ const cpt = defineComponent({
     const positionsAccumulate = ref<Accumulate<typeof sizes.value[0]>>(); // for vue2 Only
     const resetPositionsAccumulate = () => {
       positionsAccumulate.value = new Accumulate(sizes.value);
-      positionsAccumulate.value.getValue = (item) => item?.["value"]; // fix empty list
+      positionsAccumulate.value.getValue = (item) => item?.["value"]; // fix empty list.
     };
     resetPositionsAccumulate();
     const positions = computed(() =>
