@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.9](https://github.com/phphe/virtual-list/compare/@virtual-list/vue@1.1.8...@virtual-list/vue@1.1.9) (2022-12-08)
+
+
+### Bug Fixes
+
+* fix ([f748043](https://github.com/phphe/virtual-list/commit/f7480433504c88ef79b491706a48fe334ddb9bea))
+
+
+
+
+
 ## [1.1.8](https://github.com/phphe/virtual-list/compare/@virtual-list/vue@1.1.7...@virtual-list/vue@1.1.8) (2022-12-08)
 
 
