@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/phphe/virtual-list/compare/@virtual-list/vue@1.1.9...@virtual-list/vue@1.2.0) (2023-03-19)
+
+
+### Features
+
+* stop use nested computed ([c31fcee](https://github.com/phphe/virtual-list/commit/c31fcee372e946f445ee038e109550835e231b6d))
+
+
+
+
+
 ## [1.1.9](https://github.com/phphe/virtual-list/compare/@virtual-list/vue@1.1.8...@virtual-list/vue@1.1.9) (2022-12-08)
 
 
