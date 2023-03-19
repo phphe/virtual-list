@@ -1,16 +1,6 @@
 <template>
-  <div
-    class="vtlist"
-    ref="listElRef"
-    :style="listStyle"
-    @scroll.passive="onscroll"
-  >
-    <VirtualListTable
-      class="vtlist-inner"
-      ref="listInnerRef"
-      :style="listInnerStyle"
-      :table="table"
-    >
+  <div class="vtlist" ref="listElRef" :style="listStyle" @scroll.passive="onscroll">
+    <VirtualListTable class="vtlist-inner" ref="listInnerRef" :style="listInnerStyle" :table="table">
       <template #prepend>
         <slot name="prepend"></slot>
       </template>
@@ -20,14 +10,13 @@
         </template>
       </template>
       <template v-else>
-        <template
-          v-for="{ item, index } in visibleItemsInfo"
-          :key="getItemKey(item, index)"
-        >
+        <template v-for="{ item, index } in visibleItemsInfo" :key="getItemKey(item, index)">
           <slot :item="item" :index="index" />
         </template>
       </template>
-      <template #append> <slot name="append"></slot> </template>
+      <template #append>
+        <slot name="append"></slot>
+      </template>
     </VirtualListTable>
   </div>
 </template>
@@ -80,15 +69,15 @@ const cpt = defineComponent({
     const totalSize = computed(() =>
       positions.value.length > 0
         ? getPosition(positions.value.length - 1) +
-          hp.arrayLast(sizes.value).value
+        hp.arrayLast(sizes.value)
         : 0
     );
     const endSize = computed(
       () =>
-      positions.value[end2.value] ? (
-        totalSize.value -
-        getPosition(end2.value) -
-        sizes.value[end2.value].value) : 0
+        positions.value[end2.value] ? (
+          totalSize.value -
+          getPosition(end2.value) -
+          sizes.value[end2.value]) : 0
     );
     const listStyle = computed(() =>
       !props.disabled ? { overflow: "auto" } : {}
@@ -120,49 +109,30 @@ const cpt = defineComponent({
       return r;
     });
 
-    const runtimeSizes = computed(() =>
+    const runtimeSizes = computed<(number | null)[]>(() =>
       reactive<(number | null)[]>((props.items || []).map(() => null))
     );
-    const sizes = computed(() =>
-      (props.items || []).map((item, index) =>
-        computed(() => {
-          if (runtimeSizes[index] != null) {
-            return runtimeSizes[index];
-          }
-          let r = props.itemSize?.(item, index);
-          if (r == null) {
-            r = avgSize.value;
-          }
-          return r;
-        })
-      )
+    const sizes = computed<number[]>(() =>
+      (props.items || []).map((item, index) => {
+        if (runtimeSizes[index] != null) {
+          return runtimeSizes[index];
+        }
+        let r = props.itemSize?.(item, index);
+        if (r == null) {
+          r = avgSize.value;
+        }
+        return r;
+      })
     );
-    // not reactive
-    const positionsAccumulate = ref<Accumulate<typeof sizes.value[0]>>(); // for vue2 Only
-    const resetPositionsAccumulate = () => {
-      positionsAccumulate.value = new Accumulate(sizes.value);
-      positionsAccumulate.value.getValue = (item) => item?.["value"]; // fix empty list.
-    };
-    resetPositionsAccumulate();
-    const positions = computed(() =>
-      (props.items || []).map((item, index) =>
-        computed(() => {
-          let r: number;
-          if (index === 0) {
-            r = 0;
-          } else if (isVue3) {
-            let prevPosition = positions.value![index - 1];
-            let prevSize = sizes.value![index - 1];
-            r = prevPosition.value + prevSize.value;
-          } else {
-            r = positionsAccumulate.value!.sum(index - 1);
-          }
-          return r;
-        })
-      )
-    );
+    const positions = computed<number[]>(() => {
+      const p: number[] = []
+      sizes.value.reduce((a, b) => {
+        p.push(a)
+        return a + b
+      }, 0)
+      return p
+    });
     watch(() => props.items, update);
-    watch(() => positions.value, resetPositionsAccumulate);
     const visibleItemsInfo = computed(() => {
       if (!props.items || props.disabled) {
         return;
@@ -261,7 +231,6 @@ const cpt = defineComponent({
         }
       }
       if (updated) {
-        isVue2 && resetPositionsAccumulate();
         await nextTick();
       }
       // call wating task if existing
@@ -277,7 +246,7 @@ const cpt = defineComponent({
           getScroll(listEl) - getPaddingStart(listEl) - props.buffer;
         const r = hp.binarySearch(
           positions.value,
-          (mid) => mid.value - startPosition,
+          (mid) => mid - startPosition,
           { returnNearestIfNoHit: true }
         )!;
         return r.index;
@@ -291,7 +260,7 @@ const cpt = defineComponent({
 
         const r = hp.binarySearch(
           positions.value,
-          (mid) => mid.value - endPosition,
+          (mid) => mid - endPosition,
           { returnNearestIfNoHit: true }
         )!;
         return r.index;
@@ -373,7 +342,7 @@ const cpt = defineComponent({
     //     : parseFloat(style.paddingRight);
     // }
     function getPosition(index: number): number {
-      return positions.value[index].value;
+      return positions.value[index];
     }
 
     function createResizeObserver() {
@@ -408,6 +377,9 @@ const cpt = defineComponent({
       visibleItemsInfo,
       getItemKey,
       update,
+      sizes,
+      positions,
+      runtimeSizes
     };
   },
 });

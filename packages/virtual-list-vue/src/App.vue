@@ -6,14 +6,14 @@ export default defineComponent({
   components: { "v-list": vList },
   data() {
     return {
-      items: new Array(1000).fill(1).map((v, i) => ({
+      items: new Array(3000).fill(1).map((v, i) => ({
         text: "Item " + i,
         lineHeight: 20 + (i % 20) + "px",
         width: 100 + (i % 30) + "px",
       })),
     };
   },
-  mounted() {},
+  mounted() { },
 });
 </script>
 
@@ -21,13 +21,7 @@ export default defineComponent({
   <div>
     <!-- horizontal -->
     <h1>horizontal</h1>
-    <v-list
-      ref="list"
-      :items="items"
-      :first-render="10"
-      style="width: 1000px"
-      horizontal
-    >
+    <v-list ref="list" :items="items" :first-render="10" style="width: 1000px" horizontal>
       <template #default="{ item, index }">
         <h2 style="border: 1px solid #ccc" :style="{ width: item.width }">
           ITEM: {{ index }} - {{ item["text"] }}
@@ -38,17 +32,9 @@ export default defineComponent({
       <div>
         <!-- vertical -->
         <h1>vertical</h1>
-        <v-list
-          ref="list"
-          :items="items"
-          :first-render="10"
-          style="height: 600px"
-        >
+        <v-list ref="list" :items="items" :first-render="10" style="height: 600px">
           <template #default="{ item, index }">
-            <h2
-              style="border: 1px solid #ccc"
-              :style="{ lineHeight: item.lineHeight }"
-            >
+            <h2 style="border: 1px solid #ccc" :style="{ lineHeight: item.lineHeight }">
               ITEM: {{ index }} - {{ item["text"] }}
             </h2>
           </template>
@@ -56,18 +42,9 @@ export default defineComponent({
       </div>
       <div>
         <h1>vertical with key</h1>
-        <v-list
-          ref="list"
-          :items="items"
-          :first-render="10"
-          style="height: 600px"
-          itemKey="index"
-        >
+        <v-list ref="list" :items="items" :first-render="10" style="height: 600px" itemKey="index">
           <template #default="{ item, index }">
-            <h2
-              style="border: 1px solid #ccc"
-              :style="{ lineHeight: item.lineHeight }"
-            >
+            <h2 style="border: 1px solid #ccc" :style="{ lineHeight: item.lineHeight }">
               ITEM: {{ index }} - {{ item["text"] }}
               <input />
             </h2>
@@ -76,14 +53,7 @@ export default defineComponent({
       </div>
       <div>
         <h1>table</h1>
-        <v-list
-          ref="list"
-          :items="items"
-          :first-render="10"
-          style="height: 600px"
-          table
-          class="list-table"
-        >
+        <v-list ref="list" :items="items" :first-render="10" style="height: 600px" table class="list-table">
           <template #prepend>
             <thead>
               <tr>
@@ -110,6 +80,7 @@ export default defineComponent({
 .list-table th {
   border: 1px solid #ccc;
 }
+
 .list-table table {
   border-collapse: collapse;
   width: 100%;
