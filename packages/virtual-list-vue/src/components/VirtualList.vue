@@ -22,6 +22,8 @@
 </template>
 
 <script lang="ts">
+// 如果遇到滚动不流畅的情况，不用处理，因为Dev tool造成的。
+// If the scrolling is not smooth, do not deal with it, because it is caused by the Dev tool.
 import {
   ref,
   computed,
