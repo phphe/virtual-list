@@ -4,7 +4,7 @@
   "devDependencies": {
     "commitizen": "^4.1.2",
     "cz-conventional-changelog-lerna": "^0.1.0",
-    "lerna": "^5.0.0"
+    "lerna": "^8.0.0"
   },
   "scripts": {
     "commit": "cz",

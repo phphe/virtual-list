@@ -23,17 +23,17 @@ export const globals = {
 
 // https://vitejs.dev/config/
 export const isIIFE = detectIIFE();
-export const formats = !isIIFE ? ["es", "cjs"] : ["iife"];
+export const formats = !isIIFE ? ["es", "umd", "cjs"] : ["iife"];
 export default defineConfig({
   plugins: [
     vue(),
     !isIIFE &&
-      dts({
-        outputDir: "types",
-        staticImport: true,
-        insertTypesEntry: true,
-        logDiagnostics: true,
-      }),
+    dts({
+      outputDir: "types",
+      staticImport: true,
+      insertTypesEntry: true,
+      logDiagnostics: true,
+    }),
   ],
   optimizeDeps: {
     exclude: ["vue-demi"],

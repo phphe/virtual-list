@@ -15,9 +15,9 @@
   "license": "MIT",
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
   "homepage": "https://virtual-list.phphe.com",
-  "main": "dist/v3/index.cjs.js",
-  "module": "dist/v3/index.es.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/v3/index.js",
+  "module": "dist/v3/index.mjs",
+  "types": "dist/v3/index.d.ts",
   "jsdelivr": "dist/v3/index.iife.js",
   "unpkg": "dist/v3/index.iife.js",
   "files": [
@@ -30,9 +30,9 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/v3/index.cjs.js",
-      "import": "./dist/v3/index.es.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/v3/index.js",
+      "import": "./dist/v3/index.mjs",
+      "types": "./dist/v3/index.d.ts"
     },
     "./vue2": {
       "require": "./vue2/index.js",
@@ -49,7 +49,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "helper-js": "^3.1.0",
+    "helper-js": "^3.1.2",
     "vue-demi": "latest"
   },
   "peerDependencies": {
@@ -62,9 +62,9 @@
     }
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^2.2.0",
-    "vite": "^2.8.0",
-    "vite-plugin-dts": "^1.5.0",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "vite": "^5.4.2",
+    "vite-plugin-dts": "^4.0.3",
     "vue": "^3.2.25"
   }
 }
