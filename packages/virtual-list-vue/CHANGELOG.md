@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/phphe/virtual-list/compare/@virtual-list/vue@1.2.0...@virtual-list/vue@1.2.1) (2024-12-24)
+
+
+### Bug Fixes
+
+* **build tool:** update vite to 5 from 2 ([01b12b3](https://github.com/phphe/virtual-list/commit/01b12b359f13fb49ed19e9dca0a680967974c56f))
+* fix vue2 entry file ([e361433](https://github.com/phphe/virtual-list/commit/e361433b174d28ff3caf03c06c1b9711904b9006))
+
+
+
+
+
 # [1.2.0](https://github.com/phphe/virtual-list/compare/@virtual-list/vue@1.1.9...@virtual-list/vue@1.2.0) (2023-03-19)
 
 
