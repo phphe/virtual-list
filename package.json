@@ -9,7 +9,8 @@
   "scripts": {
     "commit": "cz",
     "commit-all": "git add . && cz",
-    "publish": "lerna publish"
+    "publish": "lerna publish",
+    "publish-only-npm": "lerna publish"
   },
   "config": {
     "commitizen": {
